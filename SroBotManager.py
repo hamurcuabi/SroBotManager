@@ -13,34 +13,21 @@ import sys
 from threading import Timer,Thread,Event
 
 http = urllib3.PoolManager()
-gui = QtBind.init(__name__, 'Silkroad Mobile App')
+gui = QtBind.init(__name__, 'SroBot Manager')
 String1 = QtBind.createLabel(gui, 'Veri',20, 20)
 String2 = QtBind.createLabel(gui, 'text',20, 100)
 sendDataButton=QtBind.createButton(gui, 'karakter_data_button_clicked', 'Start to send',120, 70)
 send = QtBind.createButton(gui, 'createQR', 'Create QR Code', 20, 70)
-deadCounter = 0
-oldReceiveTrainingRadius = "0"
-oldReceiveTrainingAreaX = "0"
-oldReceiveTrainingAreaY = "0"
-oldReceiveStartBot = "0"
-oldReceiveStopBot = "0"
-oldMessageCount = 0
-setState = False
-chatSetState = False
-connectedState = True
-deger = 1
 loopCount = 1
-connectedData = 0
-delay = 0
 partyMessage = {"partyMessage":[]};
 guildMessage = {"guildMessage":[]};
-qrId = ""
 oneClick = True
 isSending = False
 QtBind.setText(gui,String1, "Welcome to Silkroad Mobile App plugin. To connect your bot to the mobile app, please click 'Create QR Code' button and scan it with your phone.")
 QtBind.setText(gui,String2, "Silkroad api is not sendind data.")
 sendAllDataThread = None
-#___________________TRAINING___________________# 
+
+#___________________BACK_END_DATA___________________# 
 def sendAllData():
     tokenTest = get_character_data().copy()
     tokenData = {'tokenId':str(tokenTest['account_id'])}
@@ -122,6 +109,7 @@ def sendAllData():
     except:
         pass    
 
+#___________________MESSAGE___________________# 
 def send_message(data):
     jsondata = json.loads(data)
     result=jsondata["data"]
@@ -144,7 +132,7 @@ def send_message(data):
         if mtype==11:
             phBotChat.Union(message)                        
        
-
+#___________________THREAD_DATA___________________# 
 def karakter_data_button_clicked():
     global sendAllDataThread
     global isSending
@@ -157,7 +145,7 @@ def karakter_data_button_clicked():
         QtBind.setText(gui,String2, "Silkroad api is not sendind data.")
         isSending=False
         QtBind.setText(gui, sendDataButton,"Start to send")
-        log("Sending data canceled.")
+        log("Sending data canceled.Please wait at least 5 seconds")
         sendAllDataThread.cancel()
     else:
         QtBind.setText(gui,String2, "Silkroad api is sending data look at your phone.")
@@ -165,21 +153,8 @@ def karakter_data_button_clicked():
         log("Data will send after 5 seconds please wait...")
         QtBind.setText(gui, sendDataButton,"Stop to send")
         sendAllDataThread.start()   
-
-    
-def isExistResponseFunc(isExistResponse):
-    data = json.loads(isExistResponse)
-    result=data["success"]
-    if result==False:
-        log("We didnt find your id,please try again...")
-        oneClick == True
-    else:
-        log("Your data will be sending in every 5 seconds..")
-        isSending=False 
-        karakter_data_button_clicked()
-           
-#___________________CHAT___________________#     
-  
+        
+#___________________CHAT___________________#      
 def handle_chat(t, player, msg):
     global partyMessage
     global guildMessage
@@ -196,6 +171,7 @@ def handle_chat(t, player, msg):
     except:
         pass 
 
+#___________________EVENT___________________#   
 def handle_event(t, data):
     tokenTest = get_character_data().copy()
     if tokenTest['account_id']==0:
@@ -208,89 +184,9 @@ def handle_event(t, data):
         resp = http.request('POST',urlcharacter_data, headers={'Content-Type': 'application/json'}, body=message_data)
         
     except:
-        pass
-#___________________PARTY ___________________# 
-
-def partyInfoSend():
-    character_data = get_character_data()  
-    partyInfo = get_party()
-    global qrId
-    sendingMessage = ""
-    for p in partyInfo:
-        sendingMessage = sendingMessage + str(partyInfo[int(p)]['name'])+  '☽' + str(partyInfo[int(p)]['hp_percent']) +  '☽' + str(partyInfo[int(p)]['mp_percent']) + 'Ψ' 
-    sendingData = {"accountId":character_data['account_id'],"partyUsers":sendingMessage,"qrId":qrId};    
-
-#___________________INVENTORY___________________# 
-        
-def inventoryInfoSend():
-    inventoryData= get_inventory()
-    character_data = get_character_data()  
-    global qrId
-    sendingMessage = ""
-    for i in range(0,len(inventoryData['items'])): 
-        if inventoryData['items'][i] != None:
-            name = str(inventoryData['items'][i]['name'])
-            plus = str(inventoryData['items'][i]['plus'])
-            quantity = str(inventoryData['items'][i]['quantity'])
-            data = quantity + '☽' + plus +  '☽' + name + 'Ψ'
-            sendingMessage = sendingMessage + data 
-           
-    sendingMessage=sendingMessage.replace("'","")
-    sendingData = {'accountId':character_data['account_id'],'itemData':sendingMessage,'qrId':qrId}
-          
-#___________________GAME EVENTS___________________#     
-    
-def botting():
-    global oldReceiveTrainingRadius
-    global oldReceiveTrainingAreaX
-    global oldReceiveTrainingAreaY
-    global oldReceiveStartBot
-    global oldReceiveStopBot
-    global setState
-    global qrId
-    global bottingDataPath
-    
-    trainingArea = get_training_position()
-    accountData = get_character_data()
-    bottingData = {"accountId":accountData["account_id"],"qrId":qrId}
-    getBottingData = bottingData.copy()
-    try:
-        resp = http.request('GET', bottingDataPath, fields=getBottingData)
-       
-    except:
-        
-        pass
-    try:
-        bottingRequestText = json.loads(resp.data.decode('utf-8')) 
-        for p in bottingRequestText['androidToPcData']:
-            trainingRadius = p['trainingRadius']
-            trainingAreaX = p['trainingAreaX']
-            trainingAreaY = p['trainingAreaY']
-            receiveStartBot = p['startBot']
-            receiveStopBot = p['stopBot']
-            
-            if ((oldReceiveTrainingRadius != trainingRadius) or (oldReceiveTrainingAreaX != trainingAreaX) or (oldReceiveTrainingAreaY !=trainingAreaY)) and setState == True:
-                set_training_position(0, float(trainingAreaX), float(trainingAreaY), 0.0)
-                set_training_radius(float(trainingRadius))
-                
-            if ((oldReceiveStartBot != receiveStartBot) or  (oldReceiveStopBot !=receiveStopBot)) and setState ==True:
-                if receiveStartBot == "1":
-                    start_bot()
-                else:
-                    stop_bot()
-                
-
-            oldReceiveTrainingRadius = trainingRadius
-            oldReceiveTrainingAreaX = trainingAreaX
-            oldReceiveTrainingAreaY =trainingAreaY
-            oldReceiveStartBot = receiveStartBot
-            oldReceiveStopBot =receiveStopBot
-            setState = True
-    except:
-        log("Error")
+        pass  
     
 #___________________QR CODE___________________# 
-
 def createQR():
     global oneClick
     tokenTest = get_character_data().copy()
@@ -366,69 +262,80 @@ def timerCount(countText):
     lab2 = Label(window, text = countText,  font=("Helvetica", 18,),bg='#111111',fg='#ffffff',borderwidth=2, relief="ridge")
     lab2.grid(row=2, column= 0, sticky= N+S+E+W)
 
+#___________________PLEYER_API___________________# 
 def isPlayerExist(qrcode):
     try:
-         urlIsExist = 'https://silkroad.emrehamurcu.com/api/Silkroad/isPlayerExist?tokenId='+qrcode
-         respIsExist = http.request('GET', urlIsExist)
-         isExistResponseFunc(respIsExist.data)
+        urlIsExist = 'https://silkroad.emrehamurcu.com/api/Silkroad/isPlayerExist?tokenId='+qrcode
+        respIsExist = http.request('GET', urlIsExist)
+        isExistResponseFunc(respIsExist.data)
 
     except Exception as e:
         log("Something wrong, pleaser try again.")
         oneClick=True
         pass 
 
+def isExistResponseFunc(isExistResponse):
+    data = json.loads(isExistResponse)
+    result=data["success"]
+    if result==False:
+        log("We didnt find your id,please try again...")
+        oneClick == True
+    else:
+        log("Your data will be sending in every 5 seconds..")
+        isSending=False 
+        karakter_data_button_clicked()
+
+#___________________MESSAGE_API___________________# 
 def getAllMessage():
     try:
-         urlIsExist = 'https://silkroad.emrehamurcu.com/api/Message/getMessages'
-         respIsExist = http.request('GET', urlIsExist)
-         send_message(respIsExist.data)
-
-    except Exception as e:
-        oneClick=True
+        urlIsExist = 'https://silkroad.emrehamurcu.com/api/Message/getMessages'
+        respIsExist = http.request('GET', urlIsExist)
+        send_message(respIsExist.data)
+    except:
         pass  
 
+#___________________Booting___________________# 
 def startOrStopBoot(tokenId):
     try:
-         urlIsExist = 'https://silkroad.emrehamurcu.com/api/Boot/getBooting/'+tokenId
-         respIsExist = http.request('GET', urlIsExist)
-         jsondata = json.loads(respIsExist.data)
-         result=jsondata["data"]
-         succes=jsondata["success"]
-         if succes==True:
-             shouldStart=result["booting"]
-             if shouldStart ==True:
-                 start_bot()
-             else:
-                 stop_bot()     
+        urlIsExist = 'https://silkroad.emrehamurcu.com/api/Boot/getBooting/'+tokenId
+        respIsExist = http.request('GET', urlIsExist)
+        jsondata = json.loads(respIsExist.data)
+        result=jsondata["data"]
+        succes=jsondata["success"]
+        if succes==True:
+            shouldStart=result["booting"]
+            if shouldStart ==True:
+                start_bot()
+            else:
+                stop_bot()     
 
 
     except Exception as e:
-        oneClick=True
         pass         
 
+#___________________Trainig Area___________________# 
 def setTrainigArea():
     try:
-         tokenTest = get_character_data().copy()
-         urlIsExist = 'https://silkroad.emrehamurcu.com/api/TrainingArea/getTrainigArea/'+str(tokenTest['account_id'])
-         respIsExist = http.request('GET', urlIsExist)
-         jsondata = json.loads(respIsExist.data)
-         result=jsondata["data"]
-         succes=jsondata["success"]
-         if succes==True:
-             stop_bot()
-             x=result["x"]
-             y=result["y"]
-             z=result["z"]
-             radius=result["radius"]
-             set_training_position(0, x, y, z)
-             set_training_radius(radius)
-             start_bot()
-        
+        tokenTest = get_character_data().copy()
+        urlIsExist = 'https://silkroad.emrehamurcu.com/api/TrainingArea/getTrainigArea/'+str(tokenTest['account_id'])
+        respIsExist = http.request('GET', urlIsExist)
+        jsondata = json.loads(respIsExist.data)
+        result=jsondata["data"]
+        succes=jsondata["success"]
+        if succes==True:
+            stop_bot()
+            x=result["x"]
+            y=result["y"]
+            z=result["z"]
+            radius=result["radius"]
+            set_training_position(0, x, y, z)
+            set_training_radius(radius)
+            start_bot()
 
-    except Exception as e:
-        oneClick=True
+    except:
         pass 
 
+#___________________EVENT_LOOP___________________#  
 def event_loop():
     global loopCount
     loopCount=loopCount+1
@@ -436,7 +343,7 @@ def event_loop():
         try:
             getAllMessage()
             tokenTest = get_character_data().copy()
-            startOrStopBoot(str(tokenTest['account_id'])
+            startOrStopBoot(str(tokenTest['account_id']))
             tokenData = {'booting':str(get_status())}
             character_data_encoded_data = json.dumps(tokenData).encode('utf-8')
             urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/booting/'+str(tokenTest['account_id'])
@@ -444,21 +351,22 @@ def event_loop():
 
         except:
             pass
-#___________________Timer thread___________________# 
+
+#___________________TIMER_THREAD___________________# 
 class perpetualTimer():
 
    def __init__(self,t,hFunction):
-      self.t=t
-      self.hFunction = hFunction
-      self.thread = Timer(self.t,self.handle_function)
+       self.t=t
+       self.hFunction = hFunction
+       self.thread = Timer(self.t,self.handle_function)
 
    def handle_function(self):
-      self.hFunction()
-      self.thread = Timer(self.t,self.handle_function)
-      self.thread.start()
+       self.hFunction()
+       self.thread = Timer(self.t,self.handle_function)
+       self.thread.start()
 
    def start(self):
-      self.thread.start()
+       self.thread.start()
 
    def cancel(self):
-      self.thread.cancel()
+       self.thread.cancel()
