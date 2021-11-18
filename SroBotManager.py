@@ -343,7 +343,8 @@ def event_loop():
         try:
             getAllMessage()
             tokenTest = get_character_data().copy()
-            startOrStopBoot(str(tokenTest['account_id']))
+            if tokenTest['account_id']!=0:
+                 startOrStopBoot(str(tokenTest['account_id']))
             tokenData = {'booting':str(get_status())}
             character_data_encoded_data = json.dumps(tokenData).encode('utf-8')
             urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/booting/'+str(tokenTest['account_id'])
