@@ -37,6 +37,10 @@ accesToken=''
 tokenIdSended=False
 #___________________LOGIN___________________# 
 def login_button_clicked():
+    
+    if sendAllDataThread!=None:
+        sendAllDataThread.cancel()
+   
     email = QtBind.text(gui,MainInput)
     password = QtBind.text(gui,PasswordInput)
     if email=='':
@@ -59,7 +63,6 @@ def sendAllData():
         return
 
     headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
-    log(accesToken)
     tokenTest = get_character_data().copy()
     tokenData = {'tokenId':str(tokenTest['account_id'])}
     if tokenTest['account_id']==0:
