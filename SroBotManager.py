@@ -73,7 +73,7 @@ def sendAllData():
 
     try:
         if tokenIdSended==False:
-            urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/User/updateTokenId?tokenId='+str(tokenTest['account_id'])
+            urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/User/addToken?tokenId='+str(tokenTest['account_id'])
             resp = http.request('GET',urlcharacter_data, headers=headersApi)
             tokenIdSended=True
     except Exception as e:
