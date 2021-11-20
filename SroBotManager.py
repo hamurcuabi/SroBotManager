@@ -76,7 +76,7 @@ def sendAllData():
             character_data = get_character_data().copy()
             character_data.update(tokenData)
             character_data_encoded_data = json.dumps(character_data).encode('utf-8')
-            urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/addToken/'+str(tokenTest['account_id'])
+            urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/User/addToken/'+str(tokenTest['account_id'])
             resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
             tokenIdSended=True
     except Exception as e:
