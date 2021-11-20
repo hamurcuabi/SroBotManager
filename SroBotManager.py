@@ -16,6 +16,7 @@ http = urllib3.PoolManager()
 gui = QtBind.init(__name__, 'SroBot Manager')
 WelcomeText = QtBind.createLabel(gui, 'Veri',20, 20)
 InfoText = QtBind.createLabel(gui, 'text',20, 200)
+InfoCloseText = QtBind.createLabel(gui, 'text',20, 250)
 sendDataButton=QtBind.createButton(gui, 'karakter_data_button_clicked', 'Start to send',20, 220)
 
 MailText = QtBind.createLabel(gui, 'Your email:',20, 110)
@@ -32,6 +33,7 @@ oneClick = True
 isSending = False
 QtBind.setText(gui,WelcomeText, "Welcome to Silkroad Mobile App plugin. \n \n1- Download app, https://sroph.emrehamurcu.com/ \n2- Create an account from mobile app.\n3- Enter your account email and password.\n4- After that, click to 'Login button' and wait a few minutes")
 QtBind.setText(gui,InfoText, "Silkroad api is not sendind data.")
+QtBind.setText(gui,InfoCloseText, "WARNING: Before closing or reloding phBot ,if data is sending PLEASE STOP by clicking button. ")
 sendAllDataThread = None
 accesToken=''
 tokenIdSended=False
@@ -81,6 +83,7 @@ def sendAllData():
             tokenIdSended=True
     except Exception as e:
         tokenIdSended=False
+        log(str(e))
         pass   
 
 
@@ -257,7 +260,6 @@ def Login(password,email):
         message = {'email':email,'password':password}
         message_data = json.dumps(message).encode('utf-8')
         urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/User/getToken'
-        log(str(urlcharacter_data))
         resp = http.request('POST',urlcharacter_data, headers=headersApi, body=message_data)
         LoginRes(resp.data)
 
