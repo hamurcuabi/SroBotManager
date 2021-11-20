@@ -254,6 +254,7 @@ def Login(password,email):
         message = {'email':email,'password':password}
         message_data = json.dumps(message).encode('utf-8')
         urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/User/getToken'
+        log(str(urlcharacter_data))
         resp = http.request('POST',urlcharacter_data, headers=headersApi, body=message_data)
         LoginRes(resp.data)
 
@@ -266,13 +267,14 @@ def LoginRes(isExistResponse):
     global accesToken
     data = json.loads(isExistResponse)
     result=data["success"]
-    if result==False:
-        log("We didnt find your account,please try again...")
-    else:
+    accesToken=data["data"]
+    if result==True:
         QtBind.setText(gui,PasswordInput,"**********")
         log("Success!.Your data will be sending in every 5 seconds..")
         isSending=False 
         karakter_data_button_clicked()
+    else:
+        log("We didnt find your account,please try again...")
 
 #___________________MESSAGE_API___________________# 
 def getAllMessage():
