@@ -49,22 +49,22 @@ Create an account from mobile app than enter your credetials into our plugin. Th
  
  <p float="left">
     <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/screenshot1.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/screenshot1.png" width="100" alt="Logo">
     </a>
   <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a1.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a1.png" width="100" alt="Logo">
     </a>
      <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a2.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a2.png" width="100" alt="Logo">
     </a>
     <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a3.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a3.png" width="100" alt="Logo">
     </a>
    <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a4.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a4.png" width="100" alt="Logo">
     </a>
     <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a5.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a5.png" width="100" alt="Logo">
     </a>
 </p>
 
