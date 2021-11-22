@@ -6,7 +6,7 @@
   </a>
 
 <h3 align="center">SroBot Manager Plugin</h3>
-<h4 align="left">The best 💯 percent safe plugin with mobile app  🎉 🎊 🎉🎊 🎉🎉🎉🎊 🎉🎊 🎊</h4>
+<h4 align="left">The best 💯 percent safe plugin with mobile app  🎉 🎊🎊</h4>
 
 ## How  is it 💯 percent safe?
 
@@ -52,19 +52,19 @@ Create an account from mobile app than enter your credetials into our plugin. Th
     <img src="https://sroph.emrehamurcu.com/app-landing-page/img/screenshot1.png" width="300" alt="Logo">
     </a>
   <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/screenshot6.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a1.png" width="300" alt="Logo">
     </a>
      <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/screenshot5.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a2.png" width="300" alt="Logo">
     </a>
     <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/screenshot3.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a3.png" width="300" alt="Logo">
     </a>
    <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/screenshot7.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a4.png" width="300" alt="Logo">
     </a>
     <a>
-    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/screenshot8.png" width="300" alt="Logo">
+    <img src="https://sroph.emrehamurcu.com/app-landing-page/img/a5.png" width="300" alt="Logo">
     </a>
 </p>
 
