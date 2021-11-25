@@ -19,8 +19,8 @@ You can review our plugin codes and if you have an advice please contact us!
 ## Mobile App
 If you want to mange this plugin from your mobile, please download our app from play store.
 <p align="left">
-  <a>
-    <img href="https://play.google.com/store/apps/details?id=coderz.sroph.android" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/256px-Google_Play_Store_badge_EN.svg.png" alt="Logo">
+  <a href="https://play.google.com/store/apps/details?id=coderz.sroph.android" >
+    <img  src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/256px-Google_Play_Store_badge_EN.svg.png" alt="Logo">
   </a>
   
   ```
