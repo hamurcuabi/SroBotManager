@@ -61,11 +61,14 @@ def sendAllData():
     global isSending
 
     if isSending==False:
-        log("You must login first")
+        if sendAllDataThread!=None:
+            sendAllDataThread.cancel()
+
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
         return
 
     if accesToken=='':
-        log("You must login first")
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
         return
 
     headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
@@ -221,7 +224,7 @@ def start_sending():
     global accesToken
 
     if accesToken=='':
-        log("You must login first")
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
         return
 
     if sendAllDataThread==None:
