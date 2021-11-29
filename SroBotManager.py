@@ -58,6 +58,11 @@ def login_button_clicked():
 def sendAllData():
     global accesToken
     global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        log("You must login first")
+        return
 
     if accesToken=='':
         log("You must login first")
@@ -191,27 +196,28 @@ def send_message(data):
        
 #___________________STOP_THREAD_DATA___________________# 
 def stop_sending():
-    global sendAllDataThread
     global isSending
     global sendAllDataThread
     global accesToken
-
-    if accesToken=='':
-        log("You must login first")
+    
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
         return
 
-    if isSending==True:
-        QtBind.setText(gui,InfoText, "Silkroad api is not sendind data.")
-        isSending=False
-        QtBind.setText(gui,InfoText, "Please Login, to start data again.")
-        log("Sending data canceled.Please wait at least 5 seconds")
-        sendAllDataThread.cancel()   
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    QtBind.setText(gui,InfoText, "Silkroad api is not sendind data.")
+    isSending=False
+    QtBind.setText(gui,InfoText, "Please Login, to start data again.")
+    log("Sending data canceled.Please wait at least 5 seconds")
+    sendAllDataThread.cancel()   
 
 #___________________START_THREAD_DATA___________________# 
 def start_sending():
     global sendAllDataThread
     global isSending
-    global sendAllDataThread
     global accesToken
 
     if accesToken=='':
@@ -282,6 +288,7 @@ def LoginRes(isExistResponse):
     result=data["success"]
     accesToken=data["data"]
     if result==True:
+        QtBind.setText(gui,PasswordInput,"")
         log("Success!.Your data will be sending in every 5 seconds..")
         isSending=False 
         start_sending()
