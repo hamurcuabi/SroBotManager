@@ -63,7 +63,8 @@ def sendAllData():
     if isSending==False:
         if sendAllDataThread!=None:
             sendAllDataThread.cancel()
-
+        else:
+            sendAllDataThread=None
         QtBind.setText(gui,InfoText, "Please Login, to start data.")
         return
 
