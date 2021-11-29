@@ -56,6 +56,7 @@ def login_button_clicked():
 
 #___________________BACK_END_DATA___________________# 
 def sendAllData():
+    global sendAllDataThread
     global accesToken
     global tokenIdSended
     global isSending
@@ -230,9 +231,11 @@ def start_sending():
 
     if sendAllDataThread==None:
         sendAllDataThread=perpetualTimer(5,sendAllData)
-        
+
     else:
         sendAllDataThread.cancel()
+        sendAllDataThread=None
+        sendAllDataThread=perpetualTimer(5,sendAllData)
 
     if isSending==False:
         QtBind.setText(gui,InfoText, "Silkroad api is sending data look at your phone.")
