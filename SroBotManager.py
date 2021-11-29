@@ -17,7 +17,7 @@ gui = QtBind.init(__name__, 'SroBot Manager')
 WelcomeText = QtBind.createLabel(gui, 'Veri',20, 20)
 InfoText = QtBind.createLabel(gui, 'text',20, 200)
 InfoCloseText = QtBind.createLabel(gui, 'text',20, 250)
-sendDataButton=QtBind.createButton(gui, 'karakter_data_button_clicked', 'Start to send',20, 220)
+sendDataButton=QtBind.createButton(gui, 'stop_sending', 'Stop to send',20, 220)
 
 MailText = QtBind.createLabel(gui, 'Your email:',20, 110)
 MainInput = QtBind.createLineEdit(gui,"",100,105,120,20)
@@ -29,7 +29,6 @@ LoginButton=QtBind.createButton(gui, 'login_button_clicked', 'Login',155, 155)
 loopCount = 1
 partyMessage = {"partyMessage":[]};
 guildMessage = {"guildMessage":[]};
-oneClick = True
 isSending = False
 QtBind.setText(gui,WelcomeText, "Welcome to Silkroad Mobile App plugin. \n \n1- Download app, https://sroph.emrehamurcu.com/ \n2- Create an account from mobile app.\n3- Enter your account email and password.\n4- After that, click to 'Login button' and wait a few minutes")
 QtBind.setText(gui,InfoText, "Silkroad api is not sendind data.")
@@ -190,8 +189,26 @@ def send_message(data):
         if mtype==11:
             phBotChat.Union(message)                        
        
-#___________________THREAD_DATA___________________# 
-def karakter_data_button_clicked():
+#___________________STOP_THREAD_DATA___________________# 
+def stop_sending():
+    global sendAllDataThread
+    global isSending
+    global sendAllDataThread
+    global accesToken
+
+    if accesToken=='':
+        log("You must login first")
+        return
+
+    if isSending==True:
+        QtBind.setText(gui,InfoText, "Silkroad api is not sendind data.")
+        isSending=False
+        QtBind.setText(gui,InfoText, "Please Login, to start data again.")
+        log("Sending data canceled.Please wait at least 5 seconds")
+        sendAllDataThread.cancel()   
+
+#___________________START_THREAD_DATA___________________# 
+def start_sending():
     global sendAllDataThread
     global isSending
     global sendAllDataThread
@@ -204,20 +221,12 @@ def karakter_data_button_clicked():
     if sendAllDataThread==None:
         sendAllDataThread=perpetualTimer(5,sendAllData)
 
-    if isSending==True:
-        oneClick=True
-        QtBind.setText(gui,InfoText, "Silkroad api is not sendind data.")
-        isSending=False
-        QtBind.setText(gui, sendDataButton,"Start to send")
-        log("Sending data canceled.Please wait at least 5 seconds")
-        sendAllDataThread.cancel()
-    else:
+    if isSending==False:
         QtBind.setText(gui,InfoText, "Silkroad api is sending data look at your phone.")
         isSending=True
         log("Data will send after 5 seconds please wait...")
-        QtBind.setText(gui, sendDataButton,"Stop to send")
-        sendAllDataThread.start()   
-        
+        sendAllDataThread.start()  
+                
 #___________________CHAT___________________#      
 def handle_chat(t, player, msg):
     global partyMessage
@@ -265,7 +274,6 @@ def Login(password,email):
 
     except Exception as e:
         log("Something wrong, pleaser try again."+str(e))
-        oneClick=True
         pass 
 
 def LoginRes(isExistResponse):
@@ -274,10 +282,9 @@ def LoginRes(isExistResponse):
     result=data["success"]
     accesToken=data["data"]
     if result==True:
-        QtBind.setText(gui,PasswordInput,"**********")
         log("Success!.Your data will be sending in every 5 seconds..")
         isSending=False 
-        karakter_data_button_clicked()
+        start_sending()
     else:
         log("We didnt find your account,please try again...")
 
