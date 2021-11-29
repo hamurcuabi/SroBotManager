@@ -230,6 +230,9 @@ def start_sending():
 
     if sendAllDataThread==None:
         sendAllDataThread=perpetualTimer(5,sendAllData)
+        
+    else:
+        sendAllDataThread.cancel()
 
     if isSending==False:
         QtBind.setText(gui,InfoText, "Silkroad api is sending data look at your phone.")
