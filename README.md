@@ -13,7 +13,7 @@
 Our mobile app and this plugin are working together. Firstly you need to register an account from mobile app. Than You must enter your email and password into plugin to match app and plugin. All api requests need a header token value.For every login ,JWT token will be generate automatically.If for some reason this token lost or wrong, than your all requests will not effect our backend.
 
   ```
-You can review our plugin codes and if you have an advice please contact us!
+You can review our plugin codes and if you have any advice please contact us!
   ```
 
 ## Mobile App
