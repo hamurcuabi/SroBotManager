@@ -1,3 +1,4 @@
+from cmath import log
 from phBot import *
 from tkinter import *  
 import phBotChat
@@ -71,7 +72,6 @@ def sendAllData():
     global accesToken
     global tokenIdSended
     global isSending
-    addLeader()
 
     if isSending==False:
         if sendAllDataThread!=None:
@@ -447,9 +447,9 @@ def loadConfigs():
 def addLeader():
     if inGame:
         playerNameXcontrol = get_character_data()
-        player = playerNameXcontrol["name"]
+        player = str(playerNameXcontrol["name"])
         # Player nickname it's not empty
-        if player and not lstLeaders_exist(player):
+        if player:
             # Init dictionary
             data = {}
             # Load config if exist
@@ -781,7 +781,7 @@ def handle_chat_control(t,player,msg):
     if t == 11:
         msg = msg.split(': ',1)[1]
     # Check player at leader list or a Discord message
-    if player and lstLeaders_exist(player) or t == 100:
+    if player or t == 100 :
         # Parsing message command
         if msg == "START":
             start_bot()
