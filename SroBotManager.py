@@ -45,16 +45,12 @@ isSending = False
 QtBind.setText(gui,WelcomeText, "Welcome to Silkroad Mobile App plugin. \n \n1- Download app, https://sroph.emrehamurcu.com/ \n2- Create an account from mobile app.\n3- Enter your account email and password.\n4- After that, click to 'Login button' and wait a few minutes")
 QtBind.setText(gui,InfoText, "Silkroad api is not sendind data.")
 QtBind.setText(gui,InfoCloseText, "WARNING: Before closing or reloding phBot ,if data is sending PLEASE STOP by clicking button. ")
-sendAllDataThread = None
 accesToken=''
 tokenIdSended=False
 
 #___________________LOGIN___________________# 
 def login_button_clicked():
     
-    if sendAllDataThread!=None:
-        sendAllDataThread.cancel()
-   
     email = QtBind.text(gui,MainInput)
     password = QtBind.text(gui,PasswordInput)
     if email=='':
@@ -67,17 +63,200 @@ def login_button_clicked():
     Login(password,email)   
 
 #___________________BACK_END_DATA___________________# 
-def sendAllData():
-    global sendAllDataThread
+
+def sendAllDataAddToken():
     global accesToken
     global tokenIdSended
     global isSending
 
     if isSending==False:
-        if sendAllDataThread!=None:
-            sendAllDataThread.cancel()
-        else:
-            sendAllDataThread=None
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass
+
+    try:
+        if tokenIdSended==False:
+            character_data = get_character_data().copy()
+            character_data.update(tokenData)
+            character_data_encoded_data = json.dumps(character_data).encode('utf-8')
+            urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/User/addToken/'+str(tokenTest['account_id'])
+            resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
+            tokenIdSended=True
+    except Exception as e:
+        tokenIdSended=False
+        log(str(e))
+        pass   
+    
+def sendAllDataSetTrainigArea():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass
+
+    try:
+        setTrainigArea()
+    except Exception as e:
+        log(str(e))
+        pass
+
+def sendAllDataCharacterData():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass
+    
+    try:
+        
+        character_data = get_character_data().copy()
+        character_data.update(tokenData)
+        character_data_encoded_data = json.dumps(character_data).encode('utf-8')
+        urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/character_data/'+str(tokenTest['account_id'])
+        resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
+    except Exception as e:
+        log(str(e))
+        pass
+
+def sendAllDataPosition():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass 
+    
+    try:
+        character_data_encoded_data = json.dumps(get_position()).encode('utf-8')
+        urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/position_data/'+str(tokenTest['account_id'])
+        resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
+    except Exception as e:
+        log(str(e))
+        pass
+
+def sendAllDataTrainingData():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass 
+    
+    try:
+        character_data_encoded_data = json.dumps(get_training_position()).encode('utf-8')
+        urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/training_position_data/'+str(tokenTest['account_id'])
+        resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
+    except Exception as e:
+        log(str(e))
+        pass
+  
+def sendAllDataParty():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass  
+
+
+    try:
+        character_data_encoded_data = json.dumps(get_party()).encode('utf-8')
+        urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/party_data/'+str(tokenTest['account_id'])
+        resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
+    except Exception as e:
+        log(str(e))
+        pass
+
+def sendAllDataInventory():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
         QtBind.setText(gui,InfoText, "Please Login, to start data.")
         return
 
@@ -95,95 +274,101 @@ def sendAllData():
         pass  
 
     try:
-        if tokenIdSended==False:
-            character_data = get_character_data().copy()
-            character_data.update(tokenData)
-            character_data_encoded_data = json.dumps(character_data).encode('utf-8')
-            urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/User/addToken/'+str(tokenTest['account_id'])
-            resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
-            tokenIdSended=True
-    except Exception as e:
-        tokenIdSended=False
-        log(str(e))
-        pass   
-
-
-    try:
-        setTrainigArea()
-    except Exception as e:
-        log(str(e))
-        pass
-
-    try:
-        
-        character_data = get_character_data().copy()
-        character_data.update(tokenData)
-        character_data_encoded_data = json.dumps(character_data).encode('utf-8')
-        urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/character_data/'+str(tokenTest['account_id'])
-        resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
-    except Exception as e:
-        log(str(e))
-        pass
-
-    try:
-        character_data_encoded_data = json.dumps(get_position()).encode('utf-8')
-        urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/position_data/'+str(tokenTest['account_id'])
-        resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
-
-    except Exception as e:
-        log(str(e))
-        pass
-
-    try:
-        character_data_encoded_data = json.dumps(get_training_position()).encode('utf-8')
-        urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/training_position_data/'+str(tokenTest['account_id'])
-        resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
-
-    except Exception as e:
-        log(str(e))
-        pass
-  
-    try:
-        character_data_encoded_data = json.dumps(get_party()).encode('utf-8')
-        urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/party_data/'+str(tokenTest['account_id'])
-        resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
-
-    except Exception as e:
-        log(str(e))
-        pass
-
-    try:
         character_data_encoded_data = json.dumps(get_inventory()).encode('utf-8')
         urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/inventory_data/'+str(tokenTest['account_id'])
         resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
-
     except Exception as e:
         log(str(e))
         pass
-    
+
+def sendAllDataStorage():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass  
+
+ 
     try:
         character_data_encoded_data = json.dumps(get_storage()).encode('utf-8')
         urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/storage_data/'+str(tokenTest['account_id'])
         resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
-
     except Exception as e:
         log(str(e))
         pass
+
+def sendAllDataGuild():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass  
+
 
     try:
         character_data_encoded_data = json.dumps(get_guild()).encode('utf-8')
         urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/guild_data/'+str(tokenTest['account_id'])
         resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
-
     except Exception as e:
         log(str(e))
         pass
     
+def sendAllDataGuildUnion():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass  
+
     try:
         character_data_encoded_data = json.dumps(get_guild_union()).encode('utf-8')
         urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/guild_union_data/'+str(tokenTest['account_id'])
         resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
-
     except Exception as e:
         log(str(e))
         pass    
@@ -214,7 +399,6 @@ def send_message(data):
 #___________________STOP_THREAD_DATA___________________# 
 def stop_sending():
     global isSending
-    global sendAllDataThread
     global accesToken
     
     if isSending==False:
@@ -229,11 +413,9 @@ def stop_sending():
     isSending=False
     QtBind.setText(gui,InfoText, "Please Login, to start data again.")
     log("Sending data canceled.Please wait at least 5 seconds")
-    sendAllDataThread.cancel()   
 
 #___________________START_THREAD_DATA___________________# 
 def start_sending():
-    global sendAllDataThread
     global isSending
     global accesToken
 
@@ -241,26 +423,21 @@ def start_sending():
         QtBind.setText(gui,InfoText, "Please Login, to start data.")
         return
 
-    if sendAllDataThread==None:
-        sendAllDataThread=perpetualTimer(5,sendAllData)
-
-    else:
-        sendAllDataThread.cancel()
-        sendAllDataThread=None
-        sendAllDataThread=perpetualTimer(5,sendAllData)
-
     if isSending==False:
         QtBind.setText(gui,InfoText, "Silkroad api is sending data look at your phone.")
         isSending=True
         log("Data will send after 5 seconds please wait...")
-        sendAllDataThread.start()  
                 
 #___________________CHAT___________________#      
 def handle_chat(t, player, msg):
     
     global partyMessage
     global guildMessage 
-    
+    global isSending
+
+    if isSending==False:
+        return
+   
     handle_chat_control(t,player,msg)	
 
     headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
@@ -280,6 +457,12 @@ def handle_chat(t, player, msg):
 
 #___________________EVENT___________________#   
 def handle_event(t, data):
+
+    global isSending
+
+    if isSending==False:
+        return
+
     headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
     tokenTest = get_character_data().copy()
     if tokenTest['account_id']==0:
@@ -289,7 +472,6 @@ def handle_event(t, data):
         message_data = json.dumps(message).encode('utf-8')
         urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/Silkroad/notification_data/'+str(tokenTest['account_id'])
         resp = http.request('POST',urlcharacter_data, headers=headersApi, body=message_data)
-        
     except:
         pass  
     
@@ -343,7 +525,8 @@ def startOrStopBoot(tokenId):
         if succes==True:
             shouldStart=result["booting"]
             if shouldStart ==True:
-                start_bot()
+                if str(get_status())=="None":
+                    start_bot()
             else:
                 stop_bot()     
 
@@ -377,13 +560,35 @@ def setTrainigArea():
 
 #___________________EVENT_LOOP___________________#  
 def event_loop():
-    event_loop_control()
+
     global loopCount
+    global isSending
+    
+    if isSending==True:
+        loopCount=loopCount+1
+    else :
+        loopCount=1    
+
     if accesToken==None:
         return
-    loopCount=loopCount+1
+    
+    event_loop_control()
+
+    if loopCount%10==0:
+         Timer(5.0, sendAllDataAddToken).start()
+         Timer(5.0, sendAllDataSetTrainigArea).start()
+         Timer(5.0, sendAllDataCharacterData).start()
+         Timer(5.0, sendAllDataPosition).start()
+         Timer(5.0, sendAllDataTrainingData).start()
+         Timer(5.0, sendAllDataParty).start()
+         Timer(5.0, sendAllDataInventory).start()
+         Timer(5.0, sendAllDataStorage).start()
+         Timer(5.0, sendAllDataGuild).start()
+         Timer(5.0, sendAllDataGuildUnion).start()
+         
     if loopCount%3==0:
         try:
+            loopCount=loopCount+1
             headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
             getAllMessage()
             tokenTest = get_character_data().copy()
@@ -415,6 +620,7 @@ class perpetualTimer():
 
    def cancel(self):
        self.thread.cancel()
+       self.thread.join()
 
 # ______________________________ Xcontrol Methods ______________________________ #
 
