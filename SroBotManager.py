@@ -16,7 +16,7 @@ from threading import Timer,Thread,Event
 
 #___________________Xcontrol___________________#
 pName = 'SroBotManager'
-pVersion = '1.1.0'
+pVersion = '1.2.1'
 # Globals
 inGame = None
 followActivated = False
