@@ -98,6 +98,42 @@ def sendAllDataAddToken():
         tokenIdSended=False
         log(str(e))
         pass   
+        
+
+def sendAllDataAddTokenToDelete():
+    global accesToken
+    global tokenIdSended
+    global isSending
+
+    if isSending==False:
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    if accesToken=='':
+        QtBind.setText(gui,InfoText, "Please Login, to start data.")
+        return
+
+    headersApi={'Content-Type': 'application/json','Authorization':'Bearer '+accesToken}
+    tokenTest = get_character_data().copy()
+    tokenData = {'tokenId':str(tokenTest['account_id'])}
+    if tokenTest['account_id']==0:
+        log("After player join the game data will be send")
+        return
+    else:
+        pass
+
+    try:
+        if tokenIdSended==False:
+            character_data = get_character_data().copy()
+            character_data.update(tokenData)
+            character_data_encoded_data = json.dumps(character_data).encode('utf-8')
+            urlcharacter_data = 'https://silkroad.emrehamurcu.com/api/User/deleteToken/'+str(tokenTest['account_id'])
+            resp = http.request('POST',urlcharacter_data, headers=headersApi, body=character_data_encoded_data)
+            tokenIdSended=True
+    except Exception as e:
+        tokenIdSended=False
+        log(str(e))
+        pass           
     
 def sendAllDataSetTrainigArea():
     global accesToken
@@ -413,6 +449,7 @@ def stop_sending():
     isSending=False
     QtBind.setText(gui,InfoText, "Please Login, to start data again.")
     log("Sending data canceled.Please wait at least 5 seconds")
+    sendAllDataAddTokenToDelete()
 
 #___________________START_THREAD_DATA___________________# 
 def start_sending():
